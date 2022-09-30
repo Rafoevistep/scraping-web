@@ -6,19 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "ext-curl": "*",
-        "ext-dom": "*",
-        "ext-libxml": "*",
-        "coderockr/php-query": "dev-master",
-        "fabpot/goutte": "^4.0",
         "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "php-curl-class/php-curl-class": "@dev",
-        "voku/simple_html_dom": "^4.8",
-        "weidner/goutte": "^2.2"
+        "voku/simple_html_dom": "^4.8"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
