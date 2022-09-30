@@ -5,12 +5,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Curl\Curl;
 use voku\helper\HtmlDomParser;
+use Whitecube\LaravelPrices\Models\Price;
 
 
 class ScrapeController extends Controller
 {
 
-    public function scrape_top_posts()
+    private function scrape_top_posts(): array
     {
         $curl = new Curl();
         $curl->get('https://www.list.am/category/23');
@@ -19,7 +20,7 @@ class ScrapeController extends Controller
         $html = $curl->response;
         $htmlDomParser = HtmlDomParser::str_get_html($html);
 
-        $productDataList[] = array();
+        $topProductDataList = [];
 
         $productElements = $htmlDomParser->findOne("#tp > div.dl > div.gl");
         foreach ($productElements as $productElement) {
@@ -35,13 +36,25 @@ class ScrapeController extends Controller
                 'location' => $location
             );
 
-            $productDataList[] = $productData;
+            //convert amd to usd
+
+            $dram = 413;
+            $amd  =  mb_substr($name, -1);
+            if ($amd == '֏'){
+                $amdUpd = rtrim($name, " ֏",);
+                $var2 = str_replace(",", "", $amdUpd);
+                $convert = $var2 / $dram;
+                $productData['price'] = '$' . floor($convert);
+            }
+
+        $topProductDataList[] = $productData;
+
         }
+
+
         //get Top posts list.am
-        return response()->json($productDataList);
-
-//    return view('welcome', ['productDataList'=>$productDataList]);
-
+        // return response()->json($topProductDataList) ;
+        return $topProductDataList;
     }
 
     public function scrape_all_posts()
@@ -54,7 +67,7 @@ class ScrapeController extends Controller
         $htmlDomParser = HtmlDomParser::str_get_html($html);
 
 
-        $productDataList[] = array();
+        $productDataList = [];
 
         $productElements = $htmlDomParser->findOne("#contentr > div.dl > div.gl");
         foreach ($productElements as $productElement) {
@@ -69,14 +82,24 @@ class ScrapeController extends Controller
                 "price" => $name,
                 'location' => $location
             );
+            //convert amd to usd
+            $dram = 413;
+            $amd  =  mb_substr($name, -1);
+            if ($amd == '֏'){
+                $amdUpd = rtrim($name, " ֏",);
+                $var2 = str_replace(",", "", $amdUpd);
+                $convert = $var2 / $dram;
+                $productData['price'] = '$' . floor($convert);
+            }
 
             $productDataList[] = $productData;
         }
-
         //get all posts list.am
-        return response()->json($productDataList);
+        //return response()->json($productDataList);
 
-//    return view('welcome', ['productDataList'=>$productDataList]);
+        $topProductDataList = $this->scrape_top_posts();
+
+        return view('welcome', compact('productDataList', 'topProductDataList'));
 
     }
 
