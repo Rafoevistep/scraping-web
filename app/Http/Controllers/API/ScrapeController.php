@@ -85,8 +85,8 @@ class ScrapeController extends Controller
         if ($amd == '֏') {
             $amdUpd = rtrim($name, " ֏",);
             $var2 = str_replace(",", "", $amdUpd);
-            $convert = $var2 / $dram;
-            $itemData['price'] = '$' . floor($convert);
+            $convertAmd = $var2 / $dram;
+            $itemData['price'] = '$' . floor($convertAmd);
         }
 
         $topItemDataList[] = $itemData;

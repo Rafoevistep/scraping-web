@@ -18,9 +18,19 @@
         body {
             font-family: 'Nunito', sans-serif;
         }
-        .card-body p{
+
+        .card-body p {
             color: #666;
         }
+
+        .card:hover .card-img-top {
+            filter: brightness(1.1);
+        }
+
+        .card:hover .card-title {
+            color: #0c72ea;
+        }
+
     </style>
 </head>
 
@@ -30,11 +40,11 @@
 <div class="container  d-flex flex-wrap">
     @foreach( $topItemDataList as $item)
         <div class="col">
-            <div class="card shadow-lg p-3 mb-5 bg-body rounded" style="width: 18rem; height: 25rem;">
+            <div class="card shadow-lg p-3 mb-5 bg-body rounded" style="width: 18rem; height: 26rem;">
                 <img src="{{ $item['image']}}" class="card-img-top" alt="{{$item['name']}}">
                 <div class="card-body">
-                    <h5 class="card-title">{{$item['name']}}</h5>
                     <p class="card-text fw-bold">{{$item['price']}}</p>
+                    <h5 class="card-title">{{$item['name']}}</h5>
                     <p class="card-text ">{{$item['location']}}</p>
                 </div>
             </div>
@@ -45,11 +55,11 @@
 <div class="container  d-flex flex-wrap">
     @foreach( $itemDataList as $item)
         <div class="col">
-            <div class="card shadow-lg p-3 mb-5 bg-body rounded " style="width: 18rem; height: 25rem;">
+            <div class="card shadow-lg p-3 mb-5 bg-body rounded " style="width: 18rem; height: 26rem;">
                 <img src="{{ $item['image']}}" class="card-img-top" alt="{{$item['name']}}">
                 <div class="card-body">
-                    <h5 class="card-title">{{$item['name']}}</h5>
                     <p class="card-text">{{$item['price']}}</p>
+                    <h5 class="card-title">{{$item['name']}}</h5>
                     <p class="card-text">{{$item['location']}}</p>
                 </div>
             </div>
