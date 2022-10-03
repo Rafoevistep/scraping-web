@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Curl\Curl;
 use voku\helper\HtmlDomParser;
-use Whitecube\LaravelPrices\Models\Price;
 
 
 class ScrapeController extends Controller
@@ -14,47 +13,25 @@ class ScrapeController extends Controller
     private function scrape_top_posts(): array
     {
         $curl = new Curl();
-        $curl->get('https://www.list.am/category/23');
 
+        $curl->get('https://www.list.am/category/23');
 
         $html = $curl->response;
         $htmlDomParser = HtmlDomParser::str_get_html($html);
 
-        $topProductDataList = [];
+        $topItemDataList = [];
 
-        $productElements = $htmlDomParser->findOne("#tp > div.dl > div.gl");
-        foreach ($productElements as $productElement) {
-            $image = $productElement->findOne("img")->getAttribute("src");
-            $name = $productElement->findOne(".p")->text;
-            $price = $productElement->findOne(".l")->text;
-            $location = $productElement->findOne(".at")->text;
+        $itemElements = $htmlDomParser->findOne("#tp > div.dl > div.gl");
 
-            $productData = array(
-                "image" => $image,
-                "name" => $price,
-                "price" => $name,
-                'location' => $location
-            );
-
-            //convert amd to usd
-
-            $dram = 413;
-            $amd  =  mb_substr($name, -1);
-            if ($amd == '֏'){
-                $amdUpd = rtrim($name, " ֏",);
-                $var2 = str_replace(",", "", $amdUpd);
-                $convert = $var2 / $dram;
-                $productData['price'] = '$' . floor($convert);
-            }
-
-        $topProductDataList[] = $productData;
+        foreach ($itemElements as $itemElement) {
+            $image = $itemElement->findOne("img")->getAttribute("src");
+            $topItemDataList = $this->getTopItemDataList($itemElement, $image, $topItemDataList);
 
         }
 
-
         //get Top posts list.am
-        // return response()->json($topProductDataList) ;
-        return $topProductDataList;
+        // return response()->json($topItemDataList) ;
+        return $topItemDataList;
     }
 
     public function scrape_all_posts()
@@ -62,45 +39,58 @@ class ScrapeController extends Controller
         $curl = new Curl();
         $curl->get('https://www.list.am/category/23');
 
-
         $html = $curl->response;
         $htmlDomParser = HtmlDomParser::str_get_html($html);
 
+        $itemDataList = [];
 
-        $productDataList = [];
-
-        $productElements = $htmlDomParser->findOne("#contentr > div.dl > div.gl");
-        foreach ($productElements as $productElement) {
-            $image = $productElement->findOne("img")->getAttribute("data-original");
-            $name = $productElement->findOne(".p")->text;
-            $price = $productElement->findOne(".l")->text;
-            $location = $productElement->findOne(".at")->text;
-
-            $productData = array(
-                "image" => $image,
-                "name" => $price,
-                "price" => $name,
-                'location' => $location
-            );
-            //convert amd to usd
-            $dram = 413;
-            $amd  =  mb_substr($name, -1);
-            if ($amd == '֏'){
-                $amdUpd = rtrim($name, " ֏",);
-                $var2 = str_replace(",", "", $amdUpd);
-                $convert = $var2 / $dram;
-                $productData['price'] = '$' . floor($convert);
-            }
-
-            $productDataList[] = $productData;
+        $itemElements = $htmlDomParser->findOne("#contentr > div.dl > div.gl");
+        foreach ($itemElements as $itemElement) {
+            $image = $itemElement->findOne("img")->getAttribute("data-original");
+            $itemDataList = $this->getTopItemDataList($itemElement, $image, $itemDataList);
         }
+
         //get all posts list.am
-        //return response()->json($productDataList);
+        //return response()->json($itemDataList);
 
-        $topProductDataList = $this->scrape_top_posts();
+        $topItemDataList = $this->scrape_top_posts();
 
-        return view('welcome', compact('productDataList', 'topProductDataList'));
+        return view('welcome', compact('topItemDataList', 'itemDataList'));
 
+    }
+
+    /**
+     * @param $itemElement
+     * @param $image
+     * @param array $topItemDataList
+     * @return array
+     */
+    private function getTopItemDataList($itemElement, $image, array $topItemDataList): array
+    {
+        $name = $itemElement->findOne(".p")->text;
+        $price = $itemElement->findOne(".l")->text;
+        $location = $itemElement->findOne(".at")->text;
+
+        $itemData = array(
+            "image" => $image,
+            "name" => $price,
+            "price" => $name,
+            'location' => $location
+        );
+
+        //convert amd to usd
+
+        $dram = 413;
+        $amd = mb_substr($name, -1);
+        if ($amd == '֏') {
+            $amdUpd = rtrim($name, " ֏",);
+            $var2 = str_replace(",", "", $amdUpd);
+            $convert = $var2 / $dram;
+            $itemData['price'] = '$' . floor($convert);
+        }
+
+        $topItemDataList[] = $itemData;
+        return $topItemDataList;
     }
 
 }

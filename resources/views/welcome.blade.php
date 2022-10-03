@@ -18,6 +18,9 @@
         body {
             font-family: 'Nunito', sans-serif;
         }
+        .card-body p{
+            color: #666;
+        }
     </style>
 </head>
 
@@ -25,14 +28,14 @@
 
 <h2 class="inline-block text-center m-5">Թոփ հայտարարություններ</h2>
 <div class="container  d-flex flex-wrap">
-    @foreach( $topProductDataList as $item)
+    @foreach( $topItemDataList as $item)
         <div class="col">
-            <div class="card shadow-lg p-3 mb-5 bg-body rounded " style="width: 18rem;">
-                <img src="{{ $item['image']}}" class="card-img-top" alt="...">
+            <div class="card shadow-lg p-3 mb-5 bg-body rounded" style="width: 18rem; height: 25rem;">
+                <img src="{{ $item['image']}}" class="card-img-top" alt="{{$item['name']}}">
                 <div class="card-body">
                     <h5 class="card-title">{{$item['name']}}</h5>
-                    <p class="card-text">{{$item['price']}}</p>
-                    <p class="card-text">{{$item['location']}}</p>
+                    <p class="card-text fw-bold">{{$item['price']}}</p>
+                    <p class="card-text ">{{$item['location']}}</p>
                 </div>
             </div>
         </div>
@@ -40,10 +43,10 @@
 </div>
 <h2 class="inline-block text-center m-5">Սովորական հայտարարություններ</h2>
 <div class="container  d-flex flex-wrap">
-    @foreach( $productDataList as $item)
+    @foreach( $itemDataList as $item)
         <div class="col">
-            <div class="card shadow-lg p-3 mb-5 bg-body rounded" style="width: 18rem;">
-                <img src="{{ $item['image']}}" class="card-img-top" alt="...">
+            <div class="card shadow-lg p-3 mb-5 bg-body rounded " style="width: 18rem; height: 25rem;">
+                <img src="{{ $item['image']}}" class="card-img-top" alt="{{$item['name']}}">
                 <div class="card-body">
                     <h5 class="card-title">{{$item['name']}}</h5>
                     <p class="card-text">{{$item['price']}}</p>
