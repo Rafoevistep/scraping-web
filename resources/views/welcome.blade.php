@@ -31,6 +31,12 @@
             color: #0c72ea;
         }
 
+        .card-img-top{
+            border-radius: 8px;
+            object-fit: cover;
+            width: 250px;
+            height: 185px;
+        }
     </style>
 </head>
 
@@ -56,7 +62,7 @@
     @foreach( $itemDataList as $item)
         <div class="col">
             <div class="card shadow-lg p-3 mb-5 bg-body rounded " style="width: 18rem; height: 26rem;">
-                <img src="{{ $item['image']}}" class="card-img-top" alt="{{$item['name']}}">
+                <img src="{{ $item['image']}}" class="card-img-top " alt="{{$item['name']}}">
                 <div class="card-body">
                     <p class="card-text">{{$item['price']}}</p>
                     <h5 class="card-title">{{$item['name']}}</h5>
