@@ -22,11 +22,9 @@ class ScrapeController extends Controller
         $topItemDataList = [];
 
         $itemElements = $htmlDomParser->findOne("#tp > div.dl > div.gl");
-
         foreach ($itemElements as $itemElement) {
             $image = $itemElement->findOne("img")->getAttribute("src");
             $topItemDataList = $this->getTopItemDataList($itemElement, $image, $topItemDataList);
-
         }
 
         //get Top posts list.am
@@ -86,7 +84,7 @@ class ScrapeController extends Controller
             $amdUpd = rtrim($name, " ֏",);
             $var2 = str_replace(",", "", $amdUpd);
             $convertAmd = $var2 / $dram;
-            $itemData['price'] = '$' . floor($convertAmd);
+            $itemData['price'] = '$' . number_format($convertAmd);
         }
 
         $topItemDataList[] = $itemData;
