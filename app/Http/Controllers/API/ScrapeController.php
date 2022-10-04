@@ -29,6 +29,7 @@ class ScrapeController extends Controller
 
         //get Top posts list.am
         // return response()->json($topItemDataList) ;
+
         return $topItemDataList;
     }
 
